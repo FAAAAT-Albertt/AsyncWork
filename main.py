@@ -62,3 +62,10 @@ async def start_task():
     task = asyncio.create_task(start_task())
     # ожидание задачи, что позволяет запуститься ей в корутине
     await task
+
+
+# проверка на завершение задачи
+if task.done():
+    # Вернет True при статусе завершено
+    # Вернет False при обратном статусе
+    pass
