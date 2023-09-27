@@ -6,6 +6,7 @@
 import asyncio
 from random import random
 import time
+import urllib.parse as surl
 
 # определние корутины
 async def custom_coro():
@@ -605,4 +606,114 @@ byte_line = await reader.readline()
 # закрытие сокета
 writer.close()
 
+# закрытие сокета
+writer.close()
+# ожидание закрытия сокета
+await writer.wait_closed()
+# проверка того, закрыт ли сокет, или он находится в процессе закрытия
+if writer.is_closing():
+
+# получение байтового представления строки
+byte_data = string.encode()
 """
+
+# получение кода HTTP/S состояния страницы
+async def get_status(url):
+    # разбиение URL на компоненты
+    url_parsed = surl.urlsplit(url)
+    # открытие соединения
+    if url_parsed.scheme == 'https':
+        reader, writer = await asyncio.open_connection(url_parsed.hostname, 443, ssl=True)
+    else:
+        reader, writer = await asyncio.open_connection(url_parsed.hostname, 80)
+    # отправка GET-запроса
+    query = f'GET {url_parsed.path} HTTP/1.1\r\nHost: {url_parsed.hostname}\r\n\r\n'
+    # запись запроса в сокет
+    writer.write(query.encode())
+    # ожидание завершения записи байтов в сокет
+    await writer.drain()
+    # чтение одной строки ответа
+    response = await reader.readline()
+    # закрытие соединения
+    writer.close()
+    # декодирование ответа и его очистка от ненужных пробельных символов
+    status = response.decode().strip()
+    # возврат результата
+    return status
+
+# главная корутина
+async def main():
+    # список из 10 самых посещаемых сайтов, которые нужно проверить
+    sites = ['https://www.google.com/',
+        'https://www.youtube.com/',
+        'https://www.facebook.com/',
+        'https://twitter.com/',
+        'https://www.instagram.com/',
+        'https://www.baidu.com/',
+        'https://www.wikipedia.org/',
+        'https://yandex.ru/',
+        'https://yahoo.com/',
+        'https://www.whatsapp.com/'
+        ]
+    # проверка кодов HTTP-состояния для всех сайтов
+    for url in sites:
+        # получение кода состояния для URL
+        status = await get_status(url)
+        # вывод URL и его кода состояния
+        print(f'{url:30}:\t{status}')
+
+# запуск asyncio-программы
+asyncio.run(main())
+
+
+
+
+# проверка кодов состояния множества страниц
+# получение кода HTTP/S состояния страницы
+async def get_status(url):
+    # разбиение URL на компоненты
+    url_parsed = surl.urlsplit(url)
+    # открытие соединения
+    if url_parsed.scheme == 'https':
+        reader, writer = await asyncio.open_connection(url_parsed.hostname, 443, ssl=True)
+    else:
+        reader, writer = await asyncio.open_connection(url_parsed.hostname, 80)
+    # отправка GET-запроса
+    query = f'GET {url_parsed.path} HTTP/1.1\r\nHost: {url_parsed.hostname}\r\n\r\n'
+    # запись запроса в сокет
+    writer.write(query.encode())
+    # ожидание завершения записи байтов в сокет
+    await writer.drain()
+    # чтение одной строки ответа
+    response = await reader.readline()
+    # закрытие соединения
+    writer.close()
+    # декодирование ответа и его очистка от ненужных пробельных символов
+    status = response.decode().strip()
+    # возврат результата
+    return status
+
+# главная корутина
+async def main():
+    # список из 10 самых посещаемых сайтов, которые нужно проверить
+    sites = ['https://www.google.com/',
+        'https://www.youtube.com/',
+        'https://www.facebook.com/',
+        'https://twitter.com/',
+        'https://www.instagram.com/',
+        'https://www.baidu.com/',
+        'https://www.wikipedia.org/',
+        'https://yandex.ru/',
+        'https://yahoo.com/',
+        'https://www.whatsapp.com/'
+        ]
+    # создание всех корутин для выполнения запросов
+    coros = [get_status(url) for url in sites]
+    # выполнение всех корутин и ожидание завершения их работы
+    results = await asyncio.gather(*coros)
+    # обработка всех результатов
+    for url, status in zip(sites, results):
+        # вывод результатов
+        print(f'{url:30}:\t{status}')
+# запуск asyncio-программы
+asyncio.run(main())
