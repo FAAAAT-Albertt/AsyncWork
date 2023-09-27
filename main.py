@@ -5,6 +5,7 @@
 
 import asyncio
 from random import random
+import time
 
 # определние корутины
 async def custom_coro():
@@ -377,4 +378,113 @@ async def main():
     print(f'task: {task}')
 
 # запуск программы
+asyncio.run(main())
+
+
+# пример выполнения блокирующей задачи, зависящей от подсистемы ввода/вывода, в asyncio
+# блокирующая задача, зависящая от подсистемы ввода/вывода
+def blocking_task():
+    # вывод сообщения
+    print('Task starting')
+    # блокировка на некоторое время
+    time.sleep(2)
+    # вывод сообщения
+    print('Task done')
+
+# главная корутина
+async def main():
+    # вывод сообщения
+    print('Main running the blocking task')
+    # создание корутины для блокирующей задачи
+    coro = asyncio.to_thread(blocking_task)
+    # планирование задачи
+    task = asyncio.create_task(coro)
+    # вывод сообщения
+    print('Main doing other things')
+    # позволяем запланированной задаче запуститься
+    await asyncio.sleep(0)
+    # ожидание завершения задачи
+    await task
+
+# запуск asyncio-программы
+asyncio.run(main())
+
+
+# определение асинхронного итератора
+class AsyncIterator():
+    # конструктор, объявление некоторых данных, относящихся к состоянию объекта
+    def __init__(self):
+        self.counter = 0
+
+    # создание экземпляра итератора
+    def __aiter__(self):
+        return self
+
+    # возврат следующего объекта, допускающего ожидание
+    async def __anext__(self):
+        # проверка на то, есть ли ещё невозвращённые элементы
+        if self.counter >= 10:
+            raise StopAsyncIteration
+        # инкрементирование счётчика
+        self.counter += 1
+        # возврат значения счётчика
+        return self.counter
+
+
+# пример работы с асинхронным итератором с применением цикла async for
+# определение асинхронного итератора
+class AsyncIterator():
+    # конструктор, объявление некоторых данных, относящихся к состоянию объекта
+    def __init__(self):
+        self.counter = 0
+
+    # создание экземпляра итератора
+    def __aiter__(self):
+        return self
+
+    # возврат следующего объекта, допускающего ожидание
+    async def __anext__(self):
+        # проверка на то, есть ли ещё невозвращённые элементы
+        if self.counter >= 10:
+            raise StopAsyncIteration
+        # инкрементирование счётчика
+        self.counter += 1
+        # имитация работы
+        await asyncio.sleep(1)
+        # возврат значения счётчика
+        return self.counter
+
+# главная корутина
+async def main():
+    # обход асинхронного итератора с помощью цикла async for
+    async for item in AsyncIterator():
+        print(item)
+
+# выполнение asyncio-программы
+asyncio.run(main())
+
+
+# определение асинхронного генератора
+async def async_generator():
+    for i in range(10):
+        yield i
+
+
+# пример использования асинхронного генератора в цикле async for
+# определение асинхронного генератора
+async def async_generator():
+    # обычный цикл
+    for i in range(10):
+        # блокировка, имитирующая выполнение работы
+        await asyncio.sleep(1)
+        # выдача результата
+        yield i
+
+# главная корутина
+async def main():
+    # обход асинхронного генератора с помощью цикла async for
+    async for item in async_generator():
+        print(item)
+
+# выполнение asyncio-программы
 asyncio.run(main())
