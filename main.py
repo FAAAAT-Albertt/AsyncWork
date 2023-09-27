@@ -488,3 +488,90 @@ async def main():
 
 # выполнение asyncio-программы
 asyncio.run(main())
+
+
+# определение асинхронного менеджера контекста
+class AsyncContextManager:
+    # вход в асинхронный менеджер контекста
+    async def __aenter__(self):
+        # вывод сообщения
+        print('>entering the context manager')
+        # блокировка на некоторое время
+        await asyncio.sleep(0.5)
+
+    # выход из асинхронного менеджера контекста
+    async def __aexit__(self, exc_type, exc, tb):
+        # вывод сообщения
+        print('>exiting the context manager')
+        # блокировка на некоторое время
+        await asyncio.sleep(0.5)
+
+
+# пример работы с асинхронным менеджером контекста и с async with
+# определение асинхронного менеджера контекста
+class AsyncContextManager:
+    # вход в асинхронный менеджер контекста
+    async def __aenter__(self):
+        # вывод сообщения
+        print('>entering the context manager')
+        # блокировка на некоторое время
+        await asyncio.sleep(0.5)
+
+    # выход из асинхронного менеджера контекста
+    async def __aexit__(self, exc_type, exc, tb):
+        # вывод сообщения
+        print('>exiting the context manager')
+        # блокировка на некоторое время
+        await asyncio.sleep(0.5)
+
+# определение простой корутины
+async def custom_coroutine():
+    # создание и использование асинхронного менеджера контекста
+    async with AsyncContextManager() as manager:
+        # вывод результирующего сообщения
+        print(f'within the manager')
+
+# запуск asyncio-программы
+asyncio.run(custom_coroutine())
+
+# синхронные примеры
+# создание списка с использованием спискового включения
+result = [a*2 for a in range(100)]
+# создание словаря с использованием comprehension-выражения
+result = {a:i for a,i in zip(['a','b','c'],range(3))}
+# создание множества с использованием comprehension-выражения
+result = {a for a in [1, 2, 3, 2, 3, 1, 5, 4]}
+
+async def agenerator(): # просто пример, код реализован не верно
+
+# асинхронное списковое включение, в котором используется асинхронный генератор
+    result = [a async for a in agenerator]
+
+async def awaitables(): # просто пример, код реализован не верно
+
+# списковое включение с выражением await и обработка коллекции объектов, допускающих ожидание
+    results = [await a for a in awaitables]
+
+
+# пример выполнения команды в подпроцессе в asyncio-программе
+# главная корутина
+async def main():
+    # начало выполнения команды в подпроцессе
+    process = await asyncio.create_subprocess_exec('echo', 'Hello World')
+    # вывод сведений о подпроцессе
+    print(f'subprocess: {process}')
+
+# точка входа в программу
+asyncio.run(main())
+
+
+# пример выполнения команды командной оболочки в asyncio-программе в виде подпроцесса
+# главная корутина
+async def main():
+    # начало выполнения команды командной оболочки в подпроцессе
+    process = await asyncio.create_subprocess_shell('echo Hello World')
+    # вывод сведений о подпроцессе
+    print(f'subprocess: {process}')
+
+# точка входа в программу
+asyncio.run(main())
