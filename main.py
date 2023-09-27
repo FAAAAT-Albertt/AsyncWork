@@ -575,3 +575,34 @@ async def main():
 
 # точка входа в программу
 asyncio.run(main())
+
+async def coro_server(): # просто пример, код выполнен не верно
+# открытие соединения с HTTP-сервером
+    reader, writer = await asyncio.open_connection('www.google.com', 80)
+
+# функция для обработки клиентских подключений
+async def handler(reader, writer): # просто пример, код выполнен не верно
+
+    # запуск сервера, предназначенного для приёма HTTP-соединений
+    server = await asyncio.start_server(handler, '127.0.0.1', 80)
+
+
+"""
+# запись побайтного представления данных
+writer.write(byte_data)
+# запись нескольких строк побайтного представления данных
+writer.writelines(byte_lines)
+# запись байтового представления данных
+writer.write(byte_data)
+# ожидание завершения передачи данных
+await writer.drain()
+# чтение байтового представления данных
+byte_data = await reader.read()
+# чтение байтового представления данных
+byte_data = await reader.read(n=100)
+# чтение строки данных
+byte_line = await reader.readline()
+# закрытие сокета
+writer.close()
+
+"""
